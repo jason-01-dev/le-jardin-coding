@@ -1,0 +1,129 @@
+body {
+    margin: 0;
+    width: 100%;
+    background-color: aliceblue;
+    font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.premier {
+    width: 100%;
+    height: 40px;
+    padding-top: 20px;
+    border-bottom: 1px solid #333;
+}
+
+ol {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    margin: 0;
+    padding: 0;
+}
+
+ol li a {
+    color: rgb(2, 9, 15);
+    text-decoration: none;
+    font-weight: bold;
+    cursor: pointer; /* Pour indiquer que c'est cliquable */
+}
+
+/* MAIN LAYOUT */
+main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 50px;
+    /* --- AJOUT POUR LA PROFONDEUR --- */
+    perspective: 1500px; 
+}
+
+/* TEXTE À GAUCHE */
+.avant {
+    width: 50%;
+}
+
+.avant h1 {
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+}
+
+/* Calligraphie pour la présentation courte */
+.presentation-courte {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+/* --- ANIMATION DE SURGISSEMENT (ARRIÈRE -> DEVANT) --- */
+
+.detail-container {
+    display: grid;
+    grid-template-rows: 0fr; /* Fermé par défaut */
+    transition: grid-template-rows 0.6s ease;
+    overflow: hidden;
+}
+
+.detail-container.active {
+    grid-template-rows: 1fr; /* S'ouvre */
+}
+
+.inner-content {
+    min-height: 0;
+    opacity: 0;
+    /* Départ : loin derrière (Z négatif), petit (scale) et flou */
+    transform: translateZ(-300px) scale(0.6);
+    filter: blur(15px);
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.detail-container.active .inner-content {
+    opacity: 1;
+    /* Arrivée : position normale, taille réelle et net */
+    transform: translateZ(0) scale(1);
+    filter: blur(0);
+}
+
+/* Style calligraphique des blocs détaillés */
+.bloc-premium {
+    margin-top: 20px;
+    border-left: 3px solid #007bff;
+    padding-left: 15px;
+}
+
+.label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #007bff;
+    margin-bottom: 5px;
+}
+
+.bloc-premium p {
+    font-style: italic;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* IMAGE À DROITE */
+.gauche {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.gauche img {
+    width: 500px;
+    height: auto;
+    border-radius: 10px; /* Un petit arrondi pour le style */
+}
+
+footer {
+    width: 100%;
+    height: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #333;
+}

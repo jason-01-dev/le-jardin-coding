@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le Jardin Coding - Agence Digitale</title>
+    <style>
+        /* CONFIGURATION GLOBALE */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: aliceblue;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            overflow: hidden; 
+        }
+
+        /* HEADER */
+        .premier {
+            width: 100%;
+            height: 60px;
+            border-bottom: 1px solid #333;
+            display: flex;
+            align-items: center;
+            background: white;
+            z-index: 1000;
+            position: relative;
+        }
+
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0 20px;
+            cursor: pointer;
+            z-index: 1100;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: #333;
+            transition: 0.3s;
+        }
+
+        ol {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 0;
+            padding: 0; 
+            width: 100%;
+        }
+
+        ol li a {
+            color: #02090f;
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        /* MAIN LAYOUT - ARCHITECTURE STRICTE */
+        main {
+            display: flex;
+            flex-direction: row; /* Toujours en ligne */
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 80px;
+            height: calc(100vh - 120px);
+            perspective: 2000px;
+        }
+
+        .avant {
+            width: 50%;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left; /* Strictement à gauche */
+        }
+
+        /* TITRE - STABILISATION MOBILE */
+        .avant h1 {
+            font-size: 2.5rem;
+            color: #1a1a1a;
+            margin: 0;
+            padding: 0;
+            font-weight: 800;
+            letter-spacing: -1px;
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-origin: 0% 50%; /* Point d'ancrage fixé à l'extrême gauche */
+            z-index: 10;
+        }
+
+        .avant.active h1 {
+            transform: translateY(-100px) scale(0.8); 
+        }
+
+        .presentation-courte {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            color: #555;
+            margin-top: 15px;
+            transition: opacity 0.5s ease;
+        }
+
+        .avant.active .presentation-courte {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* DÉTAILS */
+        .detail-container {
+            position: absolute;
+            top: 55%; 
+            left: 0;
+            width: 100%;
+            max-height: 70%;
+            overflow-y: scroll;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            scrollbar-width: none;
+        }
+
+        .detail-container::-webkit-scrollbar { display: none; }
+
+        .avant.active .detail-container.show {
+            opacity: 1;
+            visibility: visible;
+            top: 25%; 
+            pointer-events: auto;
+        }
+
+        .inner-content {
+            opacity: 0;
+            transform: translateZ(-300px) translateY(30px);
+            filter: blur(15px);
+            transition: all 0.8s ease-out;
+        }
+
+        .detail-container.show .inner-content {
+            opacity: 1;
+            transform: translateZ(0) translateY(0);
+            filter: blur(0);
+        }
+
+        .texte-manifeste {
+            font-family: 'Georgia', serif;
+            font-style: italic;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #060f18;
+        }
+
+        .texte-manifeste strong {
+            font-style: normal;
+            display: block;
+            margin-bottom: 3px;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        .contact-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        .contact-link {
+            padding: 8px 15px;
+            background: white;
+            border: 1px solid #020910;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #090b0e;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* IMAGE À DROITE */
+        .gauche { width: 45%; display: flex; justify-content: flex-end; }
+        .gauche img { width: 450px; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+
+        footer {
+            width: 100%; height: 60px; border-top: 1px solid #333;
+            display: flex; align-items: center; justify-content: center; background: white;
+        }
+
+        /* --- RESPONSIVITÉ - PROTECTION ARCHITECTURE --- */
+        @media (max-width: 992px) {
+            .hamburger { display: flex; }
+            
+            ol {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                flex-direction: column;
+                background: white;
+                width: 100%;
+                height: calc(100vh - 60px);
+                justify-content: flex-start;
+                padding-top: 40px;
+                gap: 20px;
+                transition: 0.4s ease;
+                z-index: 2000;
+            }
+
+            ol.mobile-open { left: 0; }
+
+            main {
+                padding: 0 20px;
+                flex-direction: row !important; /* Force Side-by-Side */
+                justify-content: space-between;
+                gap: 15px;
+            }
+
+            .avant { 
+                width: 65%; /* Plus d'espace pour le texte */
+                text-align: left !important;
+            }
+
+            .gauche { 
+                width: 30%; 
+                display: flex;
+                justify-content: flex-end;
+            }
+
+            .gauche img { 
+                width: 100%; 
+                max-width: 180px; /* Taille réduite pour mobile */
+                height: auto;
+            }
+
+            .avant h1 { 
+                font-size: 1.1rem; /* Taille adaptée */
+                transform-origin: 0% 50%; /* Verrouillage à gauche absolu */
+            }
+
+            .avant.active h1 { 
+                transform: translateY(-80px) scale(1); /* On garde l'échelle 1 pour éviter le flou */
+            }
+
+            .presentation-courte { font-size: 0.85rem; margin-top: 10px; }
+            .texte-manifeste { font-size: 0.8rem; line-height: 1.4; }
+            .texte-manifeste strong { font-size: 0.85rem; }
+            
+            .avant.active .detail-container.show { top: 25%; }
+            .contact-link { padding: 5px 10px; font-size: 0.75rem; }
+            footer { font-size: 0.7rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="premier">
+    <div class="hamburger" id="hamburger-menu">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+    <nav style="width: 100%;">
+        <ol id="nav-list">
+            <li><a href="index.html">Accueil</a></li>
+            <li><a id="btn-qui">Qui sommes-nous</a></li>
+            <li><a id="btn-faisons">Ce que nous faisons</a></li>
+            <li><a href="#">Nos réalisations</a></li>
+            <li><a id="btn-tech">Tech Stack</a></li>
+            <li><a href="#">Clients & Avis</a></li>
+            <li><a id="btn-ensemble">Cultivons votre projet</a></li>
+        </ol>
+    </nav>
+</header>
+
+<main>
+    <section class="avant" id="section-avant">
+        <h1 id="main-title">LE JARDIN CODING</h1>
+        <p class="presentation-courte" id="main-intro">
+            Programmation sur mesure et architectures numériques de haute performance.
+        </p>
+
+        <div id="box-qui" class="detail-container">
+            <div class="inner-content">
+                <div class="texte-manifeste">
+                    <p><strong>L'Excellence comme Standard</strong> Notre mission est de fusionner l'excellence technique avec une vision créative audacieuse pour propulser votre présence numérique vers de nouveaux sommets.</p>
+                    <p><strong>Artisanat Numérique</strong> Chaque projet est traité comme une œuvre unique, où la robustesse du code rencontre la fluidité d'une expérience utilisateur soigneusement orchestrée.</p>
+                    <p><strong>Vision Long Terme</strong> Nous croyons en un accompagnement transparent pour transformer les défis technologiques complexes en leviers de croissance majeurs.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="box-faisons" class="detail-container">
+            <div class="inner-content">
+                <div class="texte-manifeste">
+                    <p><strong>Écosystèmes Web & PWA</strong> Conception de sites vitrines "Haute Couture" et de Progressive Web Apps ultra-rapides optimisées pour le SEO et l'engagement.</p>
+                    <p><strong>Solutions SaaS & Métiers</strong> Développement d'applications sur mesure (CRM, ERP) et de plateformes Cloud scalables pour automatiser vos processus business.</p>
+                    <p><strong>Innovation & IA</strong> Intégration d'Intelligence Artificielle et solutions de sécurité Cloud (DevOps) pour une infrastructure résiliente et intelligente.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="box-tech" class="detail-container">
+            <div class="inner-content">
+                <div class="texte-manifeste">
+                    <p><strong>Modern Front-End</strong> Maîtrise de React.js, Next.js et TypeScript pour des interfaces réactives et une expérience utilisateur sans compromis.</p>
+                    <p><strong>Backend Scalable</strong> Architecture robuste sous Node.js (NestJS) et Python, connectée à des bases de données haute performance (PostgreSQL, MongoDB).</p>
+                    <p><strong>Cloud Native</strong> Déploiement automatisé via Docker sur AWS et Vercel, garantissant une scalabilité infinie et une sécurité maximale.</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="box-ensemble" class="detail-container">
+            <div class="inner-content">
+                <div class="texte-manifeste">
+                    <p><strong>L'Approche Collaborative</strong> Chaque grand projet commence par un échange. Nous croyons en une immersion totale dans vos enjeux pour faire germer les meilleures solutions.</p>
+                    <p><strong>Le Processus de Culture</strong> De l'analyse stratégique au déploiement agile, nous suivons une méthodologie rigoureuse garantissant qualité, respect des délais et innovation constante.</p>
+                    <p><strong>Prêt à faire germer votre projet ?</strong> Que vous ayez un cahier des charges défini ou une idée à affiner, cultivons ensemble votre futur succès digital.</p>
+                    
+                    <div class="contact-row">
+                        <a href="mailto:contact@lejardincoding.com" class="contact-link">Email</a>
+                        <a href="#" class="contact-link">WhatsApp</a>
+                        <a href="#" class="contact-link">Facebook</a>
+                        <a href="#" class="contact-link">X</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="gauche">
+        <img src="./LE JARDIN.png" alt="Logo Le Jardin Coding">
+    </div>
+</main>
+
+<footer>
+    <span style="font-weight: bold; color: #333;">© 2026 Le Jardin Coding - Solutions Digitales de Pointe</span>
+</footer>
+
+<script>
+    const section = document.getElementById("section-avant");
+    const title = document.getElementById("main-title");
+    const intro = document.getElementById("main-intro");
+    const navList = document.getElementById("nav-list");
+    const hamburger = document.getElementById("hamburger-menu");
+    
+    hamburger.addEventListener("click", () => {
+        navList.classList.toggle("mobile-open");
+    });
+
+    const btns = {
+        qui: document.getElementById("btn-qui"),
+        faisons: document.getElementById("btn-faisons"),
+        tech: document.getElementById("btn-tech"),
+        ensemble: document.getElementById("btn-ensemble")
+    };
+
+    const boxes = {
+        qui: document.getElementById("box-qui"),
+        faisons: document.getElementById("box-faisons"),
+        tech: document.getElementById("box-tech"),
+        ensemble: document.getElementById("box-ensemble")
+    };
+
+    const data = {
+        qui: { t: "QUI SOMMES-NOUS", i: "Des artisans du numérique au service de votre excellence." },
+        faisons: { t: "NOS SOLUTIONS", i: "Nous concevons des outils digitaux puissants pour transformer votre business." },
+        tech: { t: "NOTRE TECH STACK", i: "La performance cultivée avec les technologies les plus avancées." },
+        ensemble: { t: "CULTIVONS VOTRE PROJET", i: "Plantons les graines de votre prochaine réussite technologique." }
+    };
+
+    function toggleSection(mode) {
+        navList.classList.remove("mobile-open");
+        const isCurrentlyActive = boxes[mode].classList.contains('show') && section.classList.contains('active');
+        Object.values(boxes).forEach(b => b.classList.remove('show'));
+        Object.values(btns).forEach(b => b.style.color = "");
+
+        if (isCurrentlyActive) {
+            section.classList.remove("active");
+            title.innerText = "LE JARDIN CODING";
+            intro.innerText = "Programmation sur mesure et architectures numériques de haute performance.";
+            return;
+        }
+
+        section.classList.add("active");
+        title.innerText = data[mode].t;
+        intro.innerText = data[mode].i;
+        btns[mode].style.color = "#007bff";
+        
+        setTimeout(() => {
+            boxes[mode].classList.add('show');
+        }, 50);
+    }
+
+    Object.keys(btns).forEach(key => {
+        btns[key].addEventListener("click", (e) => {
+            e.preventDefault();
+            toggleSection(key);
+        });
+    });
+</script>
+
+</body>
+</html>
