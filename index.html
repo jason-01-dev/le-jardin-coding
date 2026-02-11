@@ -1,410 +1,682 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Le Jardin Coding - Agence Digitale</title>
-    <style>
-        /* CONFIGURATION GLOBALE */
-        html, body {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100vh;
-            background-color: aliceblue;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            overflow: hidden; 
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Le Jardin Coding - Agence Digitale</title>
 
-        /* HEADER */
-        .premier {
-            width: 100%;
-            height: 60px;
-            border-bottom: 1px solid #333;
-            display: flex;
-            align-items: center;
-            background: white;
-            z-index: 1000;
-            position: relative;
-        }
+  <!-- SEO de base -->
+  <meta name="description" content="Le Jardin Coding — Programmation sur mesure, PWA, SaaS, Cloud & IA. Architectures numériques performantes, scalables et sécurisées.">
+  <link rel="icon" href="/favicon.ico">
+  <meta property="og:title" content="Le Jardin Coding - Agence Digitale">
+  <meta property="og:description" content="Programmation sur mesure et architectures numériques de haute performance.">
+  <meta property="og:type" content="website">
+  <!-- Remplace par ton image sociale -->
+  <meta property="og:image" content="https://exemple.com/og-image.jpg">
+  <meta property="og:url" content="https://exemple.com/">
+  <meta name="twitter:card" content="summary_large_image">
 
-        .hamburger {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            padding: 0 20px;
-            cursor: pointer;
-            z-index: 1100;
-        }
+  <style>
+    /* =========================
+       CONFIGURATION GLOBALE
+       ========================= */
+    :root{
+      --bg: aliceblue;
+      --text: #1a1a1a;
+      --muted: #555;
+      --border: #333;
+      --brand: #007bff;
+      --ink: #02090f;
 
-        .hamburger span {
-            display: block;
-            width: 25px;
-            height: 3px;
-            background: #333;
-            transition: 0.3s;
-        }
+      /* Dégradé pour les titres et la marque */
+      --brand-grad: linear-gradient(90deg,#1bcfb4 0%, #22a6ff 35%, #845ef7 65%, #ff7eb3 100%);
+    }
 
-        ol {
-            list-style: none;
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin: 0;
-            padding: 0; 
-            width: 100%;
-        }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100vh;             /* (Conservé) */
+      background-color: var(--bg);
+      font-family: 'Segoe UI', Arial, sans-serif;
+      overflow: hidden;          /* (Conservé) */
+      color: var(--text);
+    }
 
-        ol li a {
-            color: #02090f;
-            text-decoration: none;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
+    /* Focus clavier visible (accessibilité) */
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+    }
 
-        /* MAIN LAYOUT - ARCHITECTURE STRICTE */
-        main {
-            display: flex;
-            flex-direction: row; /* Toujours en ligne */
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 80px;
-            height: calc(100vh - 120px);
-            perspective: 2000px;
-        }
+    /* =========================
+       HEADER / NAV
+       ========================= */
+    .premier {
+      width: 100%;
+      height: 60px; /* important: on ne change pas */
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      background: white;
+      z-index: 1000;
+      position: relative; /* pour centrer la nav en desktop */
+      padding: 0 12px;
+      gap: 8px;
+    }
 
-        .avant {
-            width: 50%;
-            position: relative;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            text-align: left; /* Strictement à gauche */
-        }
+    /* Marque à gauche (logo + nom) */
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: inherit;
+      flex: 0 0 auto;
+      z-index: 1100; /* au-dessus de la nav centrée absolue */
+    }
+    /* Logo rond (même image) — AGRANDI */
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: center/cover no-repeat url("./LE JARDIN.png");
+      border: 1px solid rgba(0,0,0,.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+      flex: 0 0 42px;
+    }
+    /* Nom avec le même dégradé que dans le menu mobile */
+    .brand-name {
+      font-weight: 900;
+      letter-spacing: 0.2px;
+      font-size: 1rem;
+      white-space: nowrap;
+      text-transform: uppercase;
+      background: var(--brand-grad);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent; /* afficher le dégradé dans le texte */
+    }
 
-        /* TITRE - STABILISATION MOBILE */
-        .avant h1 {
-            font-size: 2.5rem;
-            color: #1a1a1a;
-            margin: 0;
-            padding: 0;
-            font-weight: 800;
-            letter-spacing: -1px;
-            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            transform-origin: 0% 50%; /* Point d'ancrage fixé à l'extrême gauche */
-            z-index: 10;
-        }
+    /* Nav (container) */
+    .nav-shell {
+      flex: 1 1 auto;
+      height: 100%;
+    }
 
-        .avant.active h1 {
-            transform: translateY(-100px) scale(0.8); 
-        }
+    /* Navigation (desktop) */
+    ul#nav-list {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+    }
+    ul#nav-list li a,
+    ul#nav-list li button {
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+    }
 
-        .presentation-courte {
-            font-size: 1.2rem;
-            line-height: 1.6;
-            color: #555;
-            margin-top: 15px;
-            transition: opacity 0.5s ease;
-        }
+    /* Hamburger (fixé à droite en mobile) */
+    .hamburger {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 5px;
+      padding: 0 12px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      height: 100%;
+      margin-left: auto;         /* pousse à droite */
+      z-index: 1100;
+      min-width: 48px;           /* cible tactile confortable */
+      -webkit-tap-highlight-color: transparent;
+    }
+    .hamburger span {
+      display: block;
+      width: 26px;
+      height: 3px;
+      background: #333;
+      border-radius: 2px;
+      transition: 0.3s ease;
+    }
 
-        .avant.active .presentation-courte {
-            opacity: 0;
-            pointer-events: none;
-        }
+    /* =========================
+       LAYOUT PRINCIPAL
+       ========================= */
+    main {
+      display: flex;
+      flex-direction: row; /* Toujours en ligne */
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 80px;
+      height: calc(100vh - 120px); /* (Conservé) */
+      perspective: 2000px;
+      position: relative;  /* utile pour le background mobile */
+      isolation: isolate;  /* s'assurer que les pseudo-éléments restent derrière */
+    }
 
-        /* DÉTAILS */
-        .detail-container {
-            position: absolute;
-            top: 55%; 
-            left: 0;
-            width: 100%;
-            max-height: 70%;
-            overflow-y: scroll;
-            pointer-events: none;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-            scrollbar-width: none;
-        }
+    .avant {
+      width: 50%;
+      position: relative;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: left;
+      z-index: 1; /* devant le background mobile */
+    }
 
-        .detail-container::-webkit-scrollbar { display: none; }
+    /* TITRE */
+    .avant h1 {
+      font-size: clamp(1.5rem, 2.5vw + 1rem, 2.5rem);
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+      font-weight: 800;
+      letter-spacing: -1px;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      transform-origin: 0% 50%;
+      z-index: 10;
+    }
+    .avant.active h1 {
+      transform: translateY(-100px) scale(0.8);
+    }
 
-        .avant.active .detail-container.show {
-            opacity: 1;
-            visibility: visible;
-            top: 25%; 
-            pointer-events: auto;
-        }
+    .presentation-courte {
+      font-size: clamp(.9rem, .6vw + .7rem, 1.2rem);
+      line-height: 1.6;
+      color: var(--muted);
+      margin-top: 15px;
+      transition: opacity 0.5s ease;
+    }
+    .avant.active .presentation-courte {
+      opacity: 0;
+      pointer-events: none;
+    }
 
-        .inner-content {
-            opacity: 0;
-            transform: translateZ(-300px) translateY(30px);
-            filter: blur(15px);
-            transition: all 0.8s ease-out;
-        }
+    /* DÉTAILS (panneaux) */
+    .detail-container {
+      position: absolute;
+      top: 55%;
+      left: 0;
+      width: 100%;
+      max-height: 70%;
+      overflow-y: auto;          /* Scroll interne */
+      -webkit-overflow-scrolling: touch; /* Inertie iOS */
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+      scrollbar-width: none; /* Firefox */
+      z-index: 1; /* devant le background mobile */
+    }
+    .detail-container::-webkit-scrollbar { display: none; } /* WebKit */
 
-        .detail-container.show .inner-content {
-            opacity: 1;
-            transform: translateZ(0) translateY(0);
-            filter: blur(0);
-        }
+    .avant.active .detail-container.show {
+      opacity: 1;
+      visibility: visible;
+      top: 25%;
+    }
 
-        .texte-manifeste {
-            font-family: 'Georgia', serif;
-            font-style: italic;
-            font-size: 1.15rem;
-            line-height: 1.7;
-            color: #060f18;
-        }
+    .inner-content {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s ease, transform .5s ease;
+      will-change: opacity, transform;
+      background: rgba(255,255,255,0.75);
+      backdrop-filter: blur(2px);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .detail-container.show .inner-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
 
-        .texte-manifeste strong {
-            font-style: normal;
-            display: block;
-            margin-bottom: 3px;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-        }
+    .texte-manifeste {
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #060f18;
+    }
+    .texte-manifeste strong {
+      font-style: normal;
+      display: block;
+      margin-bottom: 3px;
+      font-size: 1.15rem;
+      text-transform: uppercase;
+    }
 
-        .contact-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
+    .contact-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+      flex-wrap: wrap;
+    }
+    .contact-link {
+      padding: 8px 15px;
+      background: white;
+      border: 1px solid #020910;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #090b0e;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
 
-        .contact-link {
-            padding: 8px 15px;
-            background: white;
-            border: 1px solid #020910;
-            border-radius: 5px;
-            text-decoration: none;
-            color: #090b0e;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
+    /* IMAGE À DROITE (desktop) */
+    .gauche { width: 45%; display: flex; justify-content: flex-end; z-index: 1; }
+    .gauche img {
+      width: 450px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+    }
 
-        /* IMAGE À DROITE */
-        .gauche { width: 45%; display: flex; justify-content: flex-end; }
-        .gauche img { width: 450px; border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
+    /* FOOTER */
+    footer {
+      width: 100%;
+      height: 60px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: white;
+      position: relative;
+      z-index: 1;
+    }
 
-        footer {
-            width: 100%; height: 60px; border-top: 1px solid #333;
-            display: flex; align-items: center; justify-content: center; background: white;
-        }
+    /* =========================
+       RESPONSIVITÉ
+       ========================= */
 
-        /* --- RESPONSIVITÉ - PROTECTION ARCHITECTURE --- */
-        @media (max-width: 992px) {
-            .hamburger { display: flex; }
-            
-            ol {
-                position: fixed;
-                top: 60px;
-                left: -100%;
-                flex-direction: column;
-                background: white;
-                width: 100%;
-                height: calc(100vh - 60px);
-                justify-content: flex-start;
-                padding-top: 40px;
-                gap: 20px;
-                transition: 0.4s ease;
-                z-index: 2000;
-            }
+    /* Desktop : enlever le NOM, centrer la nav, pas de hamburger */
+    @media (min-width: 993px) {
+      .brand-name { display: none; } /* <= ENLEVER LE NOM SUR GRAND ÉCRAN */
+      .hamburger { display: none; }
 
-            ol.mobile-open { left: 0; }
+      /* Centrage parfait de la nav indépendamment du logo à gauche */
+      .nav-shell {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: max-content; /* ajuste à la largeur des items */
+        height: 100%;
+      }
 
-            main {
-                padding: 0 20px;
-                flex-direction: row !important; /* Force Side-by-Side */
-                justify-content: space-between;
-                gap: 15px;
-            }
+      /* Ne pas afficher le titre coloré dans la liste en desktop */
+      .brand-title { display: none !important; }
+    }
 
-            .avant { 
-                width: 65%; /* Plus d'espace pour le texte */
-                text-align: left !important;
-            }
+    /* Mobile : logo + nom à gauche, hamburger à droite, menu plein écran */
+    @media (max-width: 992px) {
+      .hamburger { display: flex; }
+      .brand-name { display: inline; }
 
-            .gauche { 
-                width: 30%; 
-                display: flex;
-                justify-content: flex-end;
-            }
+      ul#nav-list {
+        position: fixed;
+        top: 60px;
+        left: -100%;
+        flex-direction: column;
+        background: white;
+        width: 100%;
+        height: calc(100vh - 60px); /* (Conservé) */
+        justify-content: flex-start;
+        padding-top: 24px; /* pour laisser respirer le titre */
+        gap: 20px;
+        transition: 0.4s ease;
+        z-index: 2000;
+      }
+      ul#nav-list.mobile-open { left: 0; }
 
-            .gauche img { 
-                width: 100%; 
-                max-width: 180px; /* Taille réduite pour mobile */
-                height: auto;
-            }
+      /* Titre coloré en haut du menu mobile */
+      .brand-title {
+        display: block;
+        padding: 0 20px 6px 20px;
+        border-bottom: 1px dashed rgba(0,0,0,.08);
+        margin-bottom: 6px;
+      }
+      .brand-title .title {
+        font-weight: 900;
+        font-size: 1rem;
+        letter-spacing: .5px;
+        background: var(--brand-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent; /* rend le dégradé visible dans le texte */
+        text-transform: uppercase;
+      }
+      .brand-title .subtitle {
+        display: block;
+        margin-top: 2px;
+        font-size: .78rem;
+        color: #6b7280; /* gris doux */
+        font-weight: 600;
+      }
 
-            .avant h1 { 
-                font-size: 1.1rem; /* Taille adaptée */
-                transform-origin: 0% 50%; /* Verrouillage à gauche absolu */
-            }
+      /* === Arrière-plan mobile === */
+      .gauche { display: none; }               /* On cache la colonne image */
+      main {
+        padding: 0 20px;
+        flex-direction: row !important;
+        justify-content: space-between;
+        gap: 15px;
+      }
+      main::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: url("./LE JARDIN.png") center / cover no-repeat; /* Image en arrière-plan */
+        z-index: 0;
+        filter: brightness(0.8); /* assombri pour lisibilité */
+      }
+      main::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        /* Overlay pour lisibilité (gauche plus clair vers droite) */
+        background: linear-gradient(90deg,
+          rgba(255,255,255,0.92) 0%,
+          rgba(255,255,255,0.80) 40%,
+          rgba(255,255,255,0.30) 100%);
+        z-index: 0;
+      }
 
-            .avant.active h1 { 
-                transform: translateY(-80px) scale(1); /* On garde l'échelle 1 pour éviter le flou */
-            }
+      .avant { 
+        width: 100%;
+        text-align: left !important;
+      }
 
-            .presentation-courte { font-size: 0.85rem; margin-top: 10px; }
-            .texte-manifeste { font-size: 0.8rem; line-height: 1.4; }
-            .texte-manifeste strong { font-size: 0.85rem; }
-            
-            .avant.active .detail-container.show { top: 25%; }
-            .contact-link { padding: 5px 10px; font-size: 0.75rem; }
-            footer { font-size: 0.7rem; }
-        }
-    </style>
+      .avant h1 { 
+        font-size: 1.25rem;
+        transform-origin: 0% 50%;
+      }
+      .avant.active h1 { 
+        transform: translateY(-80px) scale(1);
+      }
+
+      .presentation-courte { font-size: 0.9rem; margin-top: 10px; }
+      .texte-manifeste { font-size: 0.9rem; line-height: 1.5; }
+      .texte-manifeste strong { font-size: 0.95rem; }
+      
+      .avant.active .detail-container.show { top: 25%; }
+
+      /* Le scroll reste interne au panneau */
+      .detail-container {
+        max-height: 70%;
+        overflow-y: auto;
+      }
+
+      .contact-link { padding: 6px 10px; font-size: 0.8rem; }
+      footer { font-size: 0.75rem; }
+    }
+
+    /* Respect des utilisateurs qui réduisent les animations */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .avant h1, .inner-content { transform: none !important; }
+    }
+  </style>
 </head>
 <body>
 
-<header class="premier">
-    <div class="hamburger" id="hamburger-menu">
-        <span></span>
-        <span></span>
-        <span></span>
-    </div>
-    <nav style="width: 100%;">
-        <ol id="nav-list">
-            <li><a href="index.html">Accueil</a></li>
-            <li><a id="btn-qui">Qui sommes-nous</a></li>
-            <li><a id="btn-faisons">Ce que nous faisons</a></li>
-            <li><a href="#">Nos réalisations</a></li>
-            <li><a id="btn-tech">Tech Stack</a></li>
-            <li><a href="#">Clients & Avis</a></li>
-            <li><a id="btn-ensemble">Cultivons votre projet</a></li>
-        </ol>
+  <header class="premier">
+    <!-- Marque à gauche (logo + nom visible seulement en mobile) -->
+    <a href="index.html" class="brand" aria-label="Le Jardin Coding - Accueil">
+      <span class="brand-logo" aria-hidden="true"></span>
+      <span class="brand-name">LE JARDIN DU CODE</span>
+    </a>
+
+    <!-- Navigation (centrée en desktop) -->
+    <nav aria-label="Navigation principale" class="nav-shell">
+      <ul id="nav-list">
+        <!-- Titre coloré en haut du menu mobile -->
+        <li class="brand-title" aria-hidden="true">
+          <span class="title">LE JARDIN DU CODE</span>
+          <span class="subtitle">Créer • Déployer • Évoluer</span>
+        </li>
+
+        <li><a href="index.html">Accueil</a></li>
+        <li><button id="btn-qui" aria-controls="box-qui" aria-expanded="false">Qui sommes-nous</button></li>
+        <li><button id="btn-faisons" aria-controls="box-faisons" aria-expanded="false">Ce que nous faisons</button></li>
+        <li><a href="#realisations">Nos réalisations</a></li>
+        <li><button id="btn-tech" aria-controls="box-tech" aria-expanded="false">Tech Stack</button></li>
+        <li><a href="#clients-avis">Clients &amp; Avis</a></li>
+        <li><button id="btn-ensemble" aria-controls="box-ensemble" aria-expanded="false">Cultivons votre projet</button></li>
+      </ul>
     </nav>
-</header>
 
-<main>
-    <section class="avant" id="section-avant">
-        <h1 id="main-title">LE JARDIN CODING</h1>
-        <p class="presentation-courte" id="main-intro">
-            Programmation sur mesure et architectures numériques de haute performance.
-        </p>
+    <!-- Hamburger à droite (mobile) -->
+    <button class="hamburger" id="hamburger-menu"
+            aria-label="Ouvrir le menu"
+            aria-controls="nav-list"
+            aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </button>
+  </header>
 
-        <div id="box-qui" class="detail-container">
-            <div class="inner-content">
-                <div class="texte-manifeste">
-                    <p><strong>L'Excellence comme Standard</strong> Notre mission est de fusionner l'excellence technique avec une vision créative audacieuse pour propulser votre présence numérique vers de nouveaux sommets.</p>
-                    <p><strong>Artisanat Numérique</strong> Chaque projet est traité comme une œuvre unique, où la robustesse du code rencontre la fluidité d'une expérience utilisateur soigneusement orchestrée.</p>
-                    <p><strong>Vision Long Terme</strong> Nous croyons en un accompagnement transparent pour transformer les défis technologiques complexes en leviers de croissance majeurs.</p>
-                </div>
-            </div>
+  <main>
+    <section class="avant" id="section-avant" aria-labelledby="main-title">
+      <h1 id="main-title">LE JARDIN CODING</h1>
+      <p class="presentation-courte" id="main-intro">
+        Programmation sur mesure et architectures numériques de haute performance.
+      </p>
+
+      <!-- Panneaux de détail (régions nommées, accessibles) -->
+      <div id="box-qui" class="detail-container" role="region" aria-labelledby="btn-qui" aria-hidden="true">
+        <div class="inner-content" tabindex="-1">
+          <div class="texte-manifeste">
+            <p><strong>L'Excellence comme Standard</strong> Notre mission est de fusionner l'excellence technique avec une vision créative audacieuse pour propulser votre présence numérique vers de nouveaux sommets.</p>
+            <p><strong>Artisanat Numérique</strong> Chaque projet est traité comme une œuvre unique, où la robustesse du code rencontre la fluidité d'une expérience utilisateur soigneusement orchestrée.</p>
+            <p><strong>Vision Long Terme</strong> Nous croyons en un accompagnement transparent pour transformer les défis technologiques complexes en leviers de croissance majeurs.</p>
+          </div>
         </div>
+      </div>
 
-        <div id="box-faisons" class="detail-container">
-            <div class="inner-content">
-                <div class="texte-manifeste">
-                    <p><strong>Écosystèmes Web & PWA</strong> Conception de sites vitrines "Haute Couture" et de Progressive Web Apps ultra-rapides optimisées pour le SEO et l'engagement.</p>
-                    <p><strong>Solutions SaaS & Métiers</strong> Développement d'applications sur mesure (CRM, ERP) et de plateformes Cloud scalables pour automatiser vos processus business.</p>
-                    <p><strong>Innovation & IA</strong> Intégration d'Intelligence Artificielle et solutions de sécurité Cloud (DevOps) pour une infrastructure résiliente et intelligente.</p>
-                </div>
-            </div>
+      <div id="box-faisons" class="detail-container" role="region" aria-labelledby="btn-faisons" aria-hidden="true">
+        <div class="inner-content" tabindex="-1">
+          <div class="texte-manifeste">
+            <p><strong>Écosystèmes Web &amp; PWA</strong> Conception de sites vitrines "Haute Couture" et de Progressive Web Apps ultra-rapides optimisées pour le SEO et l'engagement.</p>
+            <p><strong>Solutions SaaS &amp; Métiers</strong> Développement d'applications sur mesure (CRM, ERP) et de plateformes Cloud scalables pour automatiser vos processus business.</p>
+            <p><strong>Innovation &amp; IA</strong> Intégration d'Intelligence Artificielle et solutions de sécurité Cloud (DevOps) pour une infrastructure résiliente et intelligente.</p>
+          </div>
         </div>
+      </div>
 
-        <div id="box-tech" class="detail-container">
-            <div class="inner-content">
-                <div class="texte-manifeste">
-                    <p><strong>Modern Front-End</strong> Maîtrise de React.js, Next.js et TypeScript pour des interfaces réactives et une expérience utilisateur sans compromis.</p>
-                    <p><strong>Backend Scalable</strong> Architecture robuste sous Node.js (NestJS) et Python, connectée à des bases de données haute performance (PostgreSQL, MongoDB).</p>
-                    <p><strong>Cloud Native</strong> Déploiement automatisé via Docker sur AWS et Vercel, garantissant une scalabilité infinie et une sécurité maximale.</p>
-                </div>
-            </div>
+      <div id="box-tech" class="detail-container" role="region" aria-labelledby="btn-tech" aria-hidden="true">
+        <div class="inner-content" tabindex="-1">
+          <div class="texte-manifeste">
+            <p><strong>Modern Front-End</strong> Maîtrise de React.js, Next.js et TypeScript pour des interfaces réactives et une expérience utilisateur sans compromis.</p>
+            <p><strong>Backend Scalable</strong> Architecture robuste sous Node.js (NestJS) et Python, connectée à des bases de données haute performance (PostgreSQL, MongoDB).</p>
+            <p><strong>Cloud Native</strong> Déploiement automatisé via Docker sur AWS et Vercel, garantissant une scalabilité infinie et une sécurité maximale.</p>
+          </div>
         </div>
+      </div>
 
-        <div id="box-ensemble" class="detail-container">
-            <div class="inner-content">
-                <div class="texte-manifeste">
-                    <p><strong>L'Approche Collaborative</strong> Chaque grand projet commence par un échange. Nous croyons en une immersion totale dans vos enjeux pour faire germer les meilleures solutions.</p>
-                    <p><strong>Le Processus de Culture</strong> De l'analyse stratégique au déploiement agile, nous suivons une méthodologie rigoureuse garantissant qualité, respect des délais et innovation constante.</p>
-                    <p><strong>Prêt à faire germer votre projet ?</strong> Que vous ayez un cahier des charges défini ou une idée à affiner, cultivons ensemble votre futur succès digital.</p>
-                    
-                    <div class="contact-row">
-                        <a href="mailto:contact@lejardincoding.com" class="contact-link">Email</a>
-                        <a href="#" class="contact-link">WhatsApp</a>
-                        <a href="#" class="contact-link">Facebook</a>
-                        <a href="#" class="contact-link">X</a>
-                    </div>
-                </div>
+      <div id="box-ensemble" class="detail-container" role="region" aria-labelledby="btn-ensemble" aria-hidden="true">
+        <div class="inner-content" tabindex="-1">
+          <div class="texte-manifeste">
+            <p><strong>L'Approche Collaborative</strong> Chaque grand projet commence par un échange. Nous croyons en une immersion totale dans vos enjeux pour faire germer les meilleures solutions.</p>
+            <p><strong>Le Processus de Culture</strong> De l'analyse stratégique au déploiement agile, nous suivons une méthodologie rigoureuse garantissant qualité, respect des délais et innovation constante.</p>
+            <p><strong>Prêt à faire germer votre projet ?</strong> Que vous ayez un cahier des charges défini ou une idée à affiner, cultivons ensemble votre futur succès digital.</p>
+            
+            <div class="contact-row">
+              <a href="mailto:contact@lejardincoding.com" class="contact-link">Email</a>
+              <a href="https://wa.me/243000000000" target="_blank" rel="noopener noreferrer" class="contact-link">WhatsApp</a>
+              <a href="https://facebook.com/lejardincoding" target="_blank" rel="noopener noreferrer" class="contact-link">Facebook</a>
+              <a href="https://x.com/lejardincoding" target="_blank" rel="noopener noreferrer" class="contact-link">X</a>
             </div>
+          </div>
         </div>
+      </div>
     </section>
 
+    <!-- Colonne image (desktop seulement) -->
     <div class="gauche">
-        <img src="./LE JARDIN.png" alt="Logo Le Jardin Coding">
+      <img src="./LE JARDIN.png" alt="Logo Le Jardin Coding" loading="lazy">
     </div>
-</main>
+  </main>
 
-<footer>
+  <footer>
     <span style="font-weight: bold; color: #333;">© 2026 Le Jardin Coding - Solutions Digitales de Pointe</span>
-</footer>
+  </footer>
 
-<script>
+  <script>
+    // --- Sélecteurs principaux ---
     const section = document.getElementById("section-avant");
     const title = document.getElementById("main-title");
     const intro = document.getElementById("main-intro");
     const navList = document.getElementById("nav-list");
     const hamburger = document.getElementById("hamburger-menu");
     
+    // Menu mobile : ouvrir/fermer + ARIA
+    function setNav(open) {
+      navList.classList.toggle("mobile-open", open);
+      hamburger.setAttribute("aria-expanded", String(open));
+      if (open) {
+        // Focus le premier item activable
+        const firstBtn = navList.querySelector("button, a");
+        if (firstBtn) firstBtn.focus();
+      }
+    }
+
     hamburger.addEventListener("click", () => {
-        navList.classList.toggle("mobile-open");
+      const open = !navList.classList.contains("mobile-open");
+      setNav(open);
     });
 
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navList.classList.contains("mobile-open")) {
+        setNav(false);
+      }
+    });
+
+    // Fermer le menu mobile quand on clique un lien <a>
+    navList.addEventListener('click', (e) => {
+      const target = e.target;
+      if (target && target.tagName === 'A' && navList.classList.contains('mobile-open')) {
+        setNav(false);
+      }
+    });
+
+    // Boutons de panneaux
     const btns = {
-        qui: document.getElementById("btn-qui"),
-        faisons: document.getElementById("btn-faisons"),
-        tech: document.getElementById("btn-tech"),
-        ensemble: document.getElementById("btn-ensemble")
+      qui: document.getElementById("btn-qui"),
+      faisons: document.getElementById("btn-faisons"),
+      tech: document.getElementById("btn-tech"),
+      ensemble: document.getElementById("btn-ensemble")
     };
 
     const boxes = {
-        qui: document.getElementById("box-qui"),
-        faisons: document.getElementById("box-faisons"),
-        tech: document.getElementById("box-tech"),
-        ensemble: document.getElementById("box-ensemble")
+      qui: document.getElementById("box-qui"),
+      faisons: document.getElementById("box-faisons"),
+      tech: document.getElementById("box-tech"),
+      ensemble: document.getElementById("box-ensemble")
     };
 
     const data = {
-        qui: { t: "QUI SOMMES-NOUS", i: "Des artisans du numérique au service de votre excellence." },
-        faisons: { t: "NOS SOLUTIONS", i: "Nous concevons des outils digitaux puissants pour transformer votre business." },
-        tech: { t: "NOTRE TECH STACK", i: "La performance cultivée avec les technologies les plus avancées." },
-        ensemble: { t: "CULTIVONS VOTRE PROJET", i: "Plantons les graines de votre prochaine réussite technologique." }
+      qui: { t: "QUI SOMMES-NOUS", i: "Des artisans du numérique au service de votre excellence." },
+      faisons: { t: "NOS SOLUTIONS", i: "Nous concevons des outils digitaux puissants pour transformer votre business." },
+      tech: { t: "NOTRE TECH STACK", i: "La performance cultivée avec les technologies les plus avancées." },
+      ensemble: { t: "CULTIVONS VOTRE PROJET", i: "Plantons les graines de votre prochaine réussite technologique." }
     };
 
+    let current = null;
+
+    function resetView() {
+      section.classList.remove("active");
+      title.innerText = "LE JARDIN CODING";
+      intro.innerText = "Programmation sur mesure et architectures numériques de haute performance.";
+
+      Object.values(boxes).forEach(b => {
+        b.classList.remove('show');
+        b.setAttribute('aria-hidden', 'true');
+      });
+
+      Object.values(btns).forEach(b => {
+        b.style.color = "";
+      });
+      Object.keys(btns).forEach(k => {
+        btns[k].setAttribute('aria-expanded', 'false');
+      });
+
+      current = null;
+    }
+
+    function openMode(mode) {
+      section.classList.add("active");
+      title.innerText = data[mode].t;
+      intro.innerText = data[mode].i;
+
+      Object.entries(boxes).forEach(([key, el]) => {
+        const on = key === mode;
+        el.classList.toggle('show', on);
+        el.setAttribute('aria-hidden', String(!on));
+      });
+
+      Object.keys(btns).forEach(k => {
+        btns[k].style.color = (k === mode) ? "var(--brand)" : "";
+        btns[k].setAttribute('aria-expanded', String(k === mode));
+      });
+
+      // Focus accessible dans le contenu ouvert
+      const focusable = boxes[mode].querySelector('.inner-content');
+      if (focusable) {
+        focusable.setAttribute('tabindex', '-1');
+        focusable.focus();
+      }
+
+      current = mode;
+    }
+
     function toggleSection(mode) {
-        navList.classList.remove("mobile-open");
-        const isCurrentlyActive = boxes[mode].classList.contains('show') && section.classList.contains('active');
-        Object.values(boxes).forEach(b => b.classList.remove('show'));
-        Object.values(btns).forEach(b => b.style.color = "");
-
-        if (isCurrentlyActive) {
-            section.classList.remove("active");
-            title.innerText = "LE JARDIN CODING";
-            intro.innerText = "Programmation sur mesure et architectures numériques de haute performance.";
-            return;
-        }
-
-        section.classList.add("active");
-        title.innerText = data[mode].t;
-        intro.innerText = data[mode].i;
-        btns[mode].style.color = "#007bff";
-        
-        setTimeout(() => {
-            boxes[mode].classList.add('show');
-        }, 50);
+      const isActive = boxes[mode].classList.contains('show') && section.classList.contains('active');
+      if (isActive) {
+        resetView();
+      } else {
+        openMode(mode);
+      }
     }
 
     Object.keys(btns).forEach(key => {
-        btns[key].addEventListener("click", (e) => {
-            e.preventDefault();
-            toggleSection(key);
-        });
+      btns[key].addEventListener("click", (e) => {
+        e.preventDefault();
+        navList.classList.remove("mobile-open"); // fermer le menu sur action
+        hamburger.setAttribute("aria-expanded", "false");
+        toggleSection(key);
+      });
     });
-</script>
+
+    // Fermer au clic à l'extérieur (sans toucher au scroll global)
+    document.addEventListener('click', (e) => {
+      const clickedInside = section.contains(e.target) || navList.contains(e.target) || hamburger.contains(e.target);
+      if (!clickedInside && current) {
+        resetView();
+      }
+    });
+  </script>
 
 </body>
 </html>
